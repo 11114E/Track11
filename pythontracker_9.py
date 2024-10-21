@@ -3,7 +3,6 @@ import plotly.express as px
 import os
 import requests
 from flask import Flask, render_template, request
-from datetime import timedelta
 
 app = Flask(__name__)
 
@@ -147,7 +146,7 @@ def index():
         last_1440_quil_per_hour = calculate_last_1440_minutes_quil_per_hour(combined_df)
 
         # Fix: Reindex to match lengths of latest_balances and last 1,440 minute data
-        latest_balances = latest_balances.set_index('Peer ID')
+        latest_balances = latest_balances.drop_duplicates().set_index('Peer ID')
         last_1440_quil_per_day = last_1440_quil_per_day.reindex(latest_balances.index)
         last_1440_quil_per_hour = last_1440_quil_per_hour.reindex(latest_balances.index)
 
